@@ -4,7 +4,10 @@ import { AppProps } from 'next/app'
 import '../styles/index.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  if (typeof window !== undefined) {
+    return <Component {...pageProps} />
+  }
+
 }
 
 export default MyApp
