@@ -1,5 +1,6 @@
 import { Footer, Navbar } from '../components'
 import { useEffect, useState } from 'react'
+import { Loop } from '../components'
 
 
 const IndexPage = () => {
@@ -14,7 +15,10 @@ const IndexPage = () => {
   })
 
   const submitCode = (stre:string) => {
-    setCode(stre)
+    let ne = new Loop(-1, null)
+    let ns = new Loop(10, ne)
+    
+    setCode(ns.code)
   }
 
   return (
@@ -61,15 +65,6 @@ const SetCode = () => {
 }
 
 const InitScript = () => {
-
-  const [_document, set_document] = useState(null)
-
-  useEffect(() => {
-    if (document !== undefined) {
-      set_document(document.querySelector('select').value)
-    }
-    console.log(_document)
-  })
 
   return (
     <form id='form' className='flex flex-row items-center gap-4'>
@@ -124,9 +119,8 @@ const DisplayCode = (props) => {
 
   return (
     <div className='bg-white rounded-xl text-black py-2 px-4'>
-      <div className='w-96 min-h-fit h-56'>
-
-        {props.code} displayed code
+      <div className='w-96 min-h-fit h-56 whitespace-pre'>
+        {props.code}
       </div>
 
     </div>
