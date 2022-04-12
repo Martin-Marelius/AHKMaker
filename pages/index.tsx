@@ -1,4 +1,4 @@
-import { Footer, Navbar } from '../components'
+import { Footer, Keyword, Navbar } from '../components'
 import { useEffect, useState } from 'react'
 import { Loop } from '../components'
 
@@ -14,11 +14,19 @@ const IndexPage = () => {
     console.log(_document)
   })
 
-  const submitCode = (stre:string) => {
-    let ne = new Loop(-1, null)
-    let ns = new Loop(10, ne)
+  const submitCode = (str:string) => {
+    let ne = new Loop(-1)
+    let bs = new Loop(10)
+    let b2 = new Loop(22)
+    let k2 = new Keyword("f12", str)
+    k2.child = b2
+
+    setCode(k2.code)
     
-    setCode(ns.code)
+
+    k2._children.map(child => {
+      console.log(child.code)
+    })
   }
 
   return (
