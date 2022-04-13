@@ -1,20 +1,23 @@
 import { Footer, Keyword, Navbar } from '../components'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Loop } from '../components'
 
 
 const IndexPage = () => {
   const [code, setCode] = useState<string>()
+  const [components, setComponents] = useState([])
+
   const [_document, set_document] = useState(null)
 
   useEffect(() => {
+
     if (document !== undefined) {
       set_document(document.querySelector('select').value)
     }
-    console.log(_document)
-  })
+    console.log(components)
+  }, [components])
 
-  const submitCode = (str:string) => {
+  const submitCode = (str: string) => {
     let ne = new Loop(-1)
     let bs = new Loop(10)
     let b2 = new Loop(22)
@@ -22,11 +25,17 @@ const IndexPage = () => {
     k2.child = b2
 
     setCode(k2.code)
-    
+
 
     k2._children.map(child => {
       console.log(child.code)
     })
+  }
+
+  // adds a new component to the display tree at the current indent position
+  const addComponent = (x: number) => {
+    let comp = <AHKComponent indent={x} />
+    setComponents([...components, comp])
   }
 
   return (
@@ -38,6 +47,17 @@ const IndexPage = () => {
         <div className='flex lg:flex-row flex-col gap-10'>
           <div>
             <InitScript />
+            <div className='flex flex-col mt-4 gap-4'>
+              {components.map((component, index) => (
+                component
+              ))}
+            </div>
+            <div className='flex flex-col'>
+              {components.length >= 1 && (
+                <NewComponent addComp={addComponent} index={components.length} />)
+              }
+              <NewComponent addComp={addComponent} />
+            </div>
           </div>
           <div className='flex flex-col gap-4'>
             <DisplayCode code={code} />
@@ -49,6 +69,44 @@ const IndexPage = () => {
 
       </div>
     </div>
+  )
+}
+
+const AHKComponent = (props) => {
+  let indent = props.indent
+  return (
+    <form id='form' className={`flex flex-row items-center gap-4 pl-${indent}`}>
+      <div className={`relative w-min `}>
+        <select className="block normal-case appearance-none text-black rounded-xl pr-6 py-1 pl-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="keyword" placeholder='operation'>
+          <option>loop</option>
+          <option>mouseclick</option>
+          <option>delay</option>
+          <option>keyboard</option>
+        </select>
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+        </div>
+      </div>
+      <span>
+        + 
+      </span>
+
+      <input className="appearance-none normal-case block w-12 text-black rounded-xl py-1 px-2 leading-tight focus:outline-none focus:bg-white" id="char" type="text" placeholder="f12" />
+
+    </form>
+  )
+}
+
+/**
+ * tsx to add a new component in the correct indentation.
+ */
+const NewComponent = (props) => {
+  return (
+    <button onClick={() => props.addComp(props.index)} className='border border-px border-slate-300 w-96 rounded-xl mt-4'>
+      <h1 className='text-2xl self-center pb-1'>
+        +
+      </h1>
+    </button>
   )
 }
 
